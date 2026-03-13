@@ -146,6 +146,25 @@ streamlit run app.py
 **Ursache:** Virtuelle Umgebung nicht aktiviert.
 **Lösung:** Erst `.venv` aktivieren, dann installieren.
 
+### Cloud-Fehler: `ModuleNotFoundError: No module named 'altair.vegalite.v4'`
+**Ursache:** Streamlit Community Cloud nutzte Python 3.14 (sehr neu). Dabei wurde eine alte `streamlit==1.19.0` installiert, die eine alte `altair`-API erwartet — die in `altair==6.0.0` nicht mehr existiert. Versions-Konflikt.
+**Lösung:** `.python-version` Datei mit Inhalt `3.11` im Projektordner erstellen. Streamlit Community Cloud liest diese Datei und verwendet dann Python 3.11, womit stabile, kompatible Paketversionen installiert werden.
+
+---
+
+## Projektstruktur (vollständig)
+
+```
+ml_housing_project/
+├── app.py              # Streamlit Web-App (Haupt-Einstiegspunkt)
+├── model_training.py   # Modell-Training, Evaluation, Vorhersagefunktion
+├── eda.py              # Explorative Datenanalyse & Visualisierungen
+├── requirements.txt    # Python-Abhängigkeiten (für lokale & Cloud-Installation)
+├── .python-version     # Fixiert Python 3.11 für Streamlit Community Cloud
+├── .gitignore          # Dateien die Git ignorieren soll (z.B. .venv)
+└── CLAUDE.md           # Diese Dokumentation
+```
+
 ---
 
 ## Entwicklungshistorie
@@ -153,3 +172,4 @@ streamlit run app.py
 - `streamlit` zu `requirements.txt` hinzugefügt (war initial vergessen)
 - `.gitignore` hinzugefügt für sauberes GitHub-Repository
 - Deployment-Anleitung für Streamlit Community Cloud ergänzt
+- `.python-version` mit `3.11` hinzugefügt — behebt Versions-Konflikt auf Cloud (altair/streamlit Inkompatibilität mit Python 3.14)
