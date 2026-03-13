@@ -1,0 +1,21 @@
+# Virtuelle Python-Umgebung (lokal, nicht auf GitHub hochladen)
+.venv/
+venv/
+env/
+
+# Python temporäre Dateien
+__pycache__/
+*.pyc
+*.pyo
+
+# Betriebssystem-Dateien
+.DS_Store
+Thumbs.db
+
+# Geheime Konfigurationsdaten (z.B. API-Keys)
+.env
+*.env
+
+# IDE-Einstellungen
+.vscode/
+.idea/
