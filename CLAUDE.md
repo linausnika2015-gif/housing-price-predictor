@@ -147,8 +147,14 @@ streamlit run app.py
 **Lösung:** Erst `.venv` aktivieren, dann installieren.
 
 ### Cloud-Fehler: `ModuleNotFoundError: No module named 'altair.vegalite.v4'`
-**Ursache:** Streamlit Community Cloud nutzte Python 3.14 (sehr neu). Dabei wurde eine alte `streamlit==1.19.0` installiert, die eine alte `altair`-API erwartet — die in `altair==6.0.0` nicht mehr existiert. Versions-Konflikt.
-**Lösung:** `.python-version` Datei mit Inhalt `3.11` im Projektordner erstellen. Streamlit Community Cloud liest diese Datei und verwendet dann Python 3.11, womit stabile, kompatible Paketversionen installiert werden.
+**Ursache:** Streamlit Community Cloud nutzt Python 3.14 (sehr neu). Da `streamlit` ohne Versionsangabe in `requirements.txt` stand, installierte `uv` das alte `streamlit==1.19.0` — die einzige Version, die Python 3.14 als kompatibel erkannte. Dieses alte Streamlit erwartet `altair.vegalite.v4`, die in `altair==6.0.0` nicht mehr existiert. Versions-Konflikt.
+**Lösung:** Versionen in `requirements.txt` explizit pinnen:
+```
+streamlit>=1.35.0
+altair>=5.0,<6.0
+```
+- `streamlit>=1.35.0` erzwingt eine neue Streamlit-Version (nicht 1.19.0)
+- `altair>=5.0,<6.0` verhindert die Installation von altair 6.x, das mit streamlit 1.35 nicht kompatibel ist
 
 ---
 
@@ -172,4 +178,6 @@ ml_housing_project/
 - `streamlit` zu `requirements.txt` hinzugefügt (war initial vergessen)
 - `.gitignore` hinzugefügt für sauberes GitHub-Repository
 - Deployment-Anleitung für Streamlit Community Cloud ergänzt
-- `.python-version` mit `3.11` hinzugefügt — behebt Versions-Konflikt auf Cloud (altair/streamlit Inkompatibilität mit Python 3.14)
+- `.python-version` mit `3.11` hinzugefügt (wird von Cloud ignoriert, aber schadet nicht)
+- `streamlit>=1.35.0` und `altair>=5.0,<6.0` in `requirements.txt` gepinnt — behebt Versions-Konflikt auf Cloud (Python 3.14 installierte sonst altes streamlit==1.19.0 inkompatibel mit altair 6.x)
+- App erfolgreich deployed: https://housing-price-predictor-urjqkvxsrxwpe9iy9vdcvw.streamlit.app
